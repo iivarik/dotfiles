@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
-BIN_DIR=/usr/local/bin
+INSTALL_DIR=/opt/nvim
+BIN_DIR=/usr/bin
 CUR_DIR=$(pwd)
 TMP_DIR=$(mktemp -d)
 
@@ -13,8 +14,11 @@ chmod u+x ./nvim.appimage
 echo "Extracting neovim.appimage."
 ./nvim.appimage --appimage-extract > /dev/null 2>&1
 
-echo "Installing nvim to ${BIN_DIR}."
-sudo mv ./squashfs-root/usr/bin/nvim "${BIN_DIR}"
+echo "Installing nvim to ${INSTALL_DIR}."
+sudo rm -rf ${INSTALL_DIR}
+sudo mkdir -p ${INSTALL_DIR}
+sudo mv squashfs-root/* ${INSTALL_DIR}
+sudo ln -sf ${INSTALL_DIR}/AppRun ${BIN_DIR}/nvim
 
 echo "Cleaning up installation files."
 cd "$CUR_DIR"
