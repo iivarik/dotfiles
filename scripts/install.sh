@@ -12,7 +12,7 @@ function install_file() {
 
 echo "Installing prerequisites"
 sudo apt update
-sudo apt install tmux npm ripgrep unzip git
+sudo apt install -y npm zsh tmux ripgrep unzip git
 
 # Install oh-my-zsh
 echo "Installing Oh My Zsh"
@@ -22,6 +22,10 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 zsh "${PROJECT_ROOT}/scripts/install_exa.sh"
 zsh "${PROJECT_ROOT}/scripts/install_neovim.sh"
 zsh "${PROJECT_ROOT}/scripts/install_bat.sh"
+zsh "${PROJECT_ROOT}/scripts/install_vivid.sh"
 
 install_file ${PROJECT_ROOT}/.zshrc ~/.zshrc
 install_file ${PROJECT_ROOT}/.tmux.conf ~/.tmux.conf
+
+echo "Changing login shell to zsh."
+sudo chsh --shell `which zsh` `whoami`
