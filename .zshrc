@@ -108,7 +108,7 @@ alias cat="bat --theme=gruvbox-dark"
 # Misc
 alias zshcfg="vim ~/.zshrc"
 alias ohmyzsh="vim ~/.oh-my-zsh"
-alias tmuxcfg="vim ~/.tmux.conf.local"
+alias tmuxcfg="vim ~/.tmux.conf"
 alias clr="clear"
 
 alias vim="nvim"
