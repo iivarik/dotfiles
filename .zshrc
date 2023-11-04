@@ -72,8 +72,8 @@ ZSH_THEME="eastwood"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git tmux)
 
-ZSH_TMUX_AUTOSTART=true
-ZSH_TMUX_AUTOSTART_ONCE=true
+# ZSH_TMUX_AUTOSTART=true
+# ZSH_TMUX_AUTOSTART_ONCE=true
 
 source $ZSH/oh-my-zsh.sh
 
@@ -113,3 +113,6 @@ alias clr="clear"
 
 alias vim="nvim"
 alias gs="git status --short --branch"
+
+# Alacritty completions
+fpath+=${ZDOTDIR:-~}/.zsh_functions
