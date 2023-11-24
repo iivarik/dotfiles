@@ -36,6 +36,7 @@ zsh "${PROJECT_ROOT}/scripts/install_vivid.sh"
 
 install_file ${PROJECT_ROOT}/.zshrc ~/.zshrc
 install_file ${PROJECT_ROOT}/.tmux.conf ~/.tmux.conf
+install_file ${PROJECT_ROOT}/.tmux.remote.conf ~/.tmux.remote.conf
 install_file ${PROJECT_ROOT}/.config/nvim ~/.config/nvim
 
 echo "Changing login shell to zsh."
