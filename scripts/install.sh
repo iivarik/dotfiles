@@ -2,42 +2,113 @@
 
 PROJECT_ROOT=$(git rev-parse --show-toplevel)
 
-function install_file() {
-    local SOURCE_FILE="$1"
-    local DEST_FILE="$2"
+# Flags to track if a component is scheduled for installation
+prerequisites_flag=false
+oh_my_zsh_flag=false
+tools_flag=false
+config_flag=false
+extras_flag=false
 
-    local DEST_DIR=`dirname "$DEST_FILE"`
-    mkdir -p "$DEST_DIR"
-
-    if [ -e "${DEST_FILE}" ]; then
-        local TIMESTAMP=`date +%F-%T`
-        local BACKUP_FILE="${DEST_FILE}.bak_${TIMESTAMP}"
-        echo "Backing up ${DEST_FILE} to ${BACKUP_FILE}."
-        mv "${DEST_FILE}" "${BACKUP_FILE}"
-    fi
-
-    echo "Installing ${SOURCE_FILE} to ${DEST_FILE}"
-    ln -sf "${SOURCE_FILE}" "${DEST_FILE}"
+# Function definitions for each installation step
+install_prerequisites() {
+    echo "Installing prerequisites"
+    sudo apt update
+    sudo apt install -y npm zsh tmux ripgrep unzip git sysstat
 }
 
-echo "Installing prerequisites"
-sudo apt update
-sudo apt install -y npm zsh tmux ripgrep unzip git
+install_oh_my_zsh() {
+    echo "Installing Oh My Zsh"
+    rm -rf ~/.oh-my-zsh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+}
 
-# Install oh-my-zsh
-echo "Installing Oh My Zsh"
-rm -rf ~/.oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+install_tools() {
+    zsh "${PROJECT_ROOT}/scripts/install_exa.sh"
+    zsh "${PROJECT_ROOT}/scripts/install_neovim.sh"
+    zsh "${PROJECT_ROOT}/scripts/install_bat.sh"
+    zsh "${PROJECT_ROOT}/scripts/install_vivid.sh"
+    zsh "${PROJECT_ROOT}/scripts/install_lazygit.sh"
+}
 
-zsh "${PROJECT_ROOT}/scripts/install_exa.sh"
-zsh "${PROJECT_ROOT}/scripts/install_neovim.sh"
-zsh "${PROJECT_ROOT}/scripts/install_bat.sh"
-zsh "${PROJECT_ROOT}/scripts/install_vivid.sh"
+install_config() {
+    zsh "${PROJECT_ROOT}/scripts/install_config.sh"
+}
 
-install_file ${PROJECT_ROOT}/.zshrc ~/.zshrc
-install_file ${PROJECT_ROOT}/.tmux.conf ~/.tmux.conf
-install_file ${PROJECT_ROOT}/.tmux.remote.conf ~/.tmux.remote.conf
-install_file ${PROJECT_ROOT}/.config/nvim ~/.config/nvim
+install_extras() {
+    zsh "${PROJECT_ROOT}/scripts/extras/install_alacritty.sh"
+}
 
-echo "Changing login shell to zsh."
-sudo chsh --shell `which zsh` `whoami`
+# Usage message
+usage() {
+    echo "Usage: $0 [--all|--config|--extras|--tools|--help]"
+    exit 1
+}
+
+# Check if no arguments were provided
+if [ $# -eq 0 ]; then
+    usage
+fi
+
+# First pass: Check arguments and set flags
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --all)
+            if [ "$config_flag" = true ] || [ "$extras_flag" = true ] || [ "$tools_flag" = true ]; then
+                usage
+            fi
+            prerequisites_flag=true
+            oh_my_zsh_flag=true
+            tools_flag=true
+            config_flag=true
+            extras_flag=true
+            ;;
+        --config)
+            if [ "$config_flag" = true ]; then
+                usage
+            fi
+            config_flag=true
+            ;;
+        --extras)
+            if [ "$extras_flag" = true ]; then
+                usage
+            fi
+            extras_flag=true
+            ;;
+        --tools)
+            if [ "$tools_flag" = true ]; then
+                usage
+            fi
+            tools_flag=true
+            ;;
+        --help)
+            usage
+            ;;
+        *)
+            echo "Invalid argument: $1"
+            usage
+            ;;
+    esac
+    shift
+done
+
+# Second pass: Perform installations based on flags
+if [ "$prerequisites_flag" = true ]; then
+    install_prerequisites
+fi
+
+if [ "$oh_my_zsh_flag" = true ]; then
+    install_oh_my_zsh
+fi
+
+if [ "$tools_flag" = true ]; then
+    install_tools
+fi
+
+if [ "$config_flag" = true ]; then
+    install_config
+fi
+
+if [ "$extras_flag" = true ]; then
+    install_extras
+fi
+
