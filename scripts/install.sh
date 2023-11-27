@@ -28,6 +28,7 @@ install_tools() {
     zsh "${PROJECT_ROOT}/scripts/install_bat.sh"
     zsh "${PROJECT_ROOT}/scripts/install_vivid.sh"
     zsh "${PROJECT_ROOT}/scripts/install_lazygit.sh"
+    zsh "${PROJECT_ROOT}/scripts/install_gh.sh"
 }
 
 install_config() {

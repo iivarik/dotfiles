@@ -114,6 +114,10 @@ alias clr="clear"
 alias vim="nvim"
 alias gs="git status --short --branch"
 
+alias \?\?="gh copilot suggest -t shell"
+alias g\?="gh copilot suggest -t git"
+alias gh\?="gh copilot suggest -t gh"
+
 # Alacritty completions
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 
