@@ -1,5 +1,10 @@
 #!/usr/bin/bash
 
+if [ -x "$(command -v exa)" ]; then
+  echo "exa already installed. Skipping install."
+  exit 0
+fi
+
 BIN_DIR=/usr/local/bin
 ZSH_COMPLETIONS_DIR=/usr/local/share/zsh/site-functions
 MAN_DIR=/usr/share/man

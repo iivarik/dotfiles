@@ -1,5 +1,10 @@
 #!/usr/bin/bash
 
+if [ -x "$(command -v bat)" ]; then
+  echo "bat already installed. Skipping install."
+  exit 0
+fi
+
 CUR_DIR=$(pwd)
 TMP_DIR=$(mktemp -d)
 

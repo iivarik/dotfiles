@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -x "$(command -v lazygit)" ]; then
+  echo "lazygit already installed. Skipping install."
+  exit 0
+fi
+
 CUR_DIR=$(pwd)
 TMP_DIR=$(mktemp -d)
 

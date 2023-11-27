@@ -1,5 +1,10 @@
 #!/usr/bin/bash
 
+if [ -x "$(command -v nvim)" ]; then
+  echo "nvim already installed. Skipping install."
+  exit 0
+fi
+
 INSTALL_DIR=/opt/nvim
 BIN_DIR=/usr/bin
 CUR_DIR=$(pwd)
