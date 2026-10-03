@@ -4,6 +4,12 @@ export PATH="$HOME/.local/bin:$PATH"
 export EDITOR="nvim"
 export VISUAL="nvim"
 
+# Use the systemd ssh-agent (WSL doesn't set this); keys are added on first use
+# via AddKeysToAgent in ~/.ssh/config
+if [[ -z $SSH_AUTH_SOCK && -S $XDG_RUNTIME_DIR/openssh_agent ]]; then
+  export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/openssh_agent"
+fi
+
 # ---------------------------------------------------------------------------
 # Options & history
 # ---------------------------------------------------------------------------

@@ -69,6 +69,11 @@ install_links() {
   link .zshrc                   .zshrc
   link .config/tmux             .config/tmux
   link .config/nvim             .config/nvim
+
+  # Own hosts go in ~/.ssh/config.d/ (untracked); sockets/ is for connection reuse
+  mkdir -p ~/.ssh/config.d ~/.ssh/sockets
+  chmod 700 ~/.ssh ~/.ssh/config.d ~/.ssh/sockets
+  link .ssh/config              .ssh/config
 }
 
 install_shell() {
